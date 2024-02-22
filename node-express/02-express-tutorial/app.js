@@ -102,52 +102,78 @@
 //   console.log("Server is running on port 5000...");
 // });
 
+// //Query search
+// const app = require("express")();
+// const { products, people } = require("./data");
+
+// app.get("/", (req, res) => {
+//   // res.status(200).json([{ name: "John" }, { name: "Susan" }]);
+//   // res.status(200).json(products);
+//   res.send('<h1>Home Page</h1> <a href="/api/products" >Products</a>');
+// });
+
+// app.get("/api/products", (req, res) => {
+//   // res.json(products);
+//   const new_products = products.map((product) => {
+//     const { name, desc, price } = product;
+//     return { name, desc, price };
+//   });
+//   res.json(new_products);
+// });
+
+// app.get("/api/products/:productId", (req, res) => {
+//   const { productId } = req.params;
+//   const singleProduct = products.find(
+//     (product) => product.id === Number(productId)
+//   );
+//   if (singleProduct) res.status(200).json(singleProduct);
+//   else res.status(404).json({ error: "No product available" });
+// });
+
+// app.get("/api/v1/query", (req, res) => {
+//   // console.log(req.query);
+//   const { search, limit } = req.query;
+//   let sortedProducts = [...products];
+//   if (search) {
+//     sortedProducts = sortedProducts.filter((product) => {
+//       return product.name.startsWith(search);
+//     });
+//   }
+//   if (limit) {
+//     sortedProducts = sortedProducts.slice(0, Number(limit));
+//   }
+//   if (sortedProducts.length < 1) {
+//     return res.status(200).send("No products matches your search criteria");
+//   }
+//   res.json(sortedProducts);
+//   // res.send("Hello World");
+// });
+
+// app.listen(5000, () => {
+//   console.log("Server is listening on port 5000...");
+// });
+
 const app = require("express")();
-const { products, people } = require("./data");
 
-app.get("/", (req, res) => {
-  // res.status(200).json([{ name: "John" }, { name: "Susan" }]);
-  // res.status(200).json(products);
-  res.send('<h1>Home Page</h1> <a href="/api/products" >Products</a>');
+//req => middleware => res
+//middleware
+const logger = (req, res, next) => {
+  const method = req.method;
+  const url = req.url;
+  const time = new Date().getFullYear();
+  console.log(method, url, time);
+  next();
+};
+
+app.get("/", logger, (req, res) => {
+  console.log("User hit home page");
+  res.send("Home Pgae");
 });
 
-app.get("/api/products", (req, res) => {
-  // res.json(products);
-  const new_products = products.map((product) => {
-    const { name, desc, price } = product;
-    return { name, desc, price };
-  });
-  res.json(new_products);
+app.get("/about", logger, (req, res) => {
+  console.log("User hit about page");
+  res.send("About page");
 });
-
-app.get("/api/products/:productId", (req, res) => {
-  const { productId } = req.params;
-  const singleProduct = products.find(
-    (product) => product.id === Number(productId)
-  );
-  if (singleProduct) res.status(200).json(singleProduct);
-  else res.status(404).json({ error: "No product available" });
-});
-
-app.get("/api/v1/query", (req, res) => {
-  // console.log(req.query);
-  const { search, limit } = req.query;
-  let sortedProducts = [...products];
-  if (search) {
-    sortedProducts = sortedProducts.filter((product) => {
-      return product.name.startsWith(search);
-    });
-  }
-  if (limit) {
-    sortedProducts = sortedProducts.slice(0, Number(limit));
-  }
-  if (sortedProducts.length < 1) {
-    res.status(200).send("No products matches your search criteria");
-  }
-  res.json(sortedProducts);
-  // res.send("Hello World");
-});
-
 app.listen(5000, () => {
   console.log("Server is listening on port 5000...");
 });
