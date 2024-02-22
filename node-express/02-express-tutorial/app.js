@@ -56,23 +56,58 @@
 // });
 // server.listen(5000);
 
-// const app = require("express")();
-const express = require("express");
-const app = express();
+// // Express Basics
+// // const app = require("express")();
+// const express = require("express");
+// const app = express();
+
+// app.get("/", (req, res) => {
+//   console.log("user hit the home page resource");
+//   res.send("Home Page");
+// });
+
+// app.get("/about", (req, res) => {
+//   console.log("user hit about page");
+//   res.send("About Page");
+// });
+
+// app.all("*", (req, res) => {
+//   console.log("user hit unknown page");
+//   res.status(404).send("resource not found");
+// });
+
+// app.listen(5000, () => {
+//   console.log("Server is listening on port 5000...");
+// });
+
+// //express app
+// const express = require("express");
+// const app = express();
+// const path = require("path");
+
+// //Setup middleware
+// app.use(express.static("./public"));
+
+// // app.get("/", (req, res) => {
+// //   console.log("User hit root");
+// //   res.status(200).sendFile(path.resolve(__dirname, "./navbar-app/index.html "));
+// // });
+
+// app.all("*", (req, res) => {
+//   console.log("user hit unknown page");
+//   res.status(404).send("<h1>Resource Not Found</h1>");
+// });
+
+// app.listen(5000, () => {
+//   console.log("Server is running on port 5000...");
+// });
+
+const app = require("express")();
+const { products, people } = require("./data");
 
 app.get("/", (req, res) => {
-  console.log("user hit the home page resource");
-  res.send("Home Page");
-});
-
-app.get("/about", (req, res) => {
-  console.log("user hit about page");
-  res.send("About Page");
-});
-
-app.all("*", (req, res) => {
-  console.log("user hit unknown page");
-  res.status(404).send("resource not found");
+  // res.status(200).json([{ name: "John" }, { name: "Susan" }]);
+  res.status(200).json(products);
 });
 
 app.listen(5000, () => {
