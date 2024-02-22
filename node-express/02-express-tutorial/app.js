@@ -107,7 +107,26 @@ const { products, people } = require("./data");
 
 app.get("/", (req, res) => {
   // res.status(200).json([{ name: "John" }, { name: "Susan" }]);
-  res.status(200).json(products);
+  // res.status(200).json(products);
+  res.send('<h1>Home Page</h1> <a href="/api/products" >Products</a>');
+});
+
+app.get("/api/products", (req, res) => {
+  // res.json(products);
+  const new_products = products.map((product) => {
+    const { name, desc, price } = product;
+    return { name, desc, price };
+  });
+  res.json(new_products);
+});
+
+app.get("/api/products/:productId", (req, res) => {
+  const { productId } = req.params;
+  const singleProduct = products.find(
+    (product) => product.id === Number(productId)
+  );
+  if (singleProduct) res.status(200).json(singleProduct);
+  else res.status(404).json({ error: "No product available" });
 });
 
 app.listen(5000, () => {
