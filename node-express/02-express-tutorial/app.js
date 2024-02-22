@@ -154,26 +154,75 @@
 // });
 
 const app = require("express")();
+const logger = require("./logger");
+const authorize = require("./authorize");
+const morgan = require("morgan");
 
 //req => middleware => res
-//middleware
-const logger = (req, res, next) => {
-  const method = req.method;
-  const url = req.url;
-  const time = new Date().getFullYear();
-  console.log(method, url, time);
-  next();
-};
+// //middleware
+// const logger = (req, res, next) => {
+//   const method = req.method;
+//   const url = req.url;
+//   const time = new Date().getFullYear();
+//   console.log(method, url, time);
+//   next();
+// };
 
-app.get("/", logger, (req, res) => {
+// app.get("/", logger, (req, res) => {
+//   console.log("User hit home page");
+//   res.send("Home Pgae");
+// });
+
+// app.get("/about", logger, (req, res) => {
+//   console.log("User hit about page");
+//   res.send("About page");
+// });
+
+// app.get("/api/products", logger, (req, res) => {
+//   // console.log("User hit products page");
+//   res.send("Products Page");
+// });
+
+// app.get("/api/items", logger, (req, res) => {
+//   // console.log("User hit items page");
+//   res.send("items page");
+// });
+
+// app.use(logger); // will be applied to all routes
+// app.use("/api", logger); // will be applied to only routes with "/api"
+app.use([authorize, logger]); // Order of middlrewares is most important here. They will be executed as per order they have written
+
+// app.use(express.static("./public"));
+app.use(morgan("tiny"));
+
+app.get("/", (req, res) => {
   console.log("User hit home page");
   res.send("Home Pgae");
 });
 
-app.get("/about", logger, (req, res) => {
+app.get("/about", (req, res) => {
   console.log("User hit about page");
   res.send("About page");
 });
+
+app.get("/api/products", (req, res) => {
+  // console.log("User hit products page");
+  res.send("Products Page");
+});
+
+app.get("/api/items", (req, res) => {
+  // console.log("User hit items page");
+  console.log(req.user);
+  res.send("items page");
+});
+
+// //passing multiple middlewares
+// app.get("/api/items", [authorize, logger], (req, res) => {
+//   // console.log("User hit items page");
+//   // console.log(req.user);
+//   res.send("items page");
+// });
+
 app.listen(5000, () => {
   console.log("Server is listening on port 5000...");
 });
