@@ -62,10 +62,28 @@ const updateTask = async (req, res) => {
   }
 };
 
+const editTask = async (req, res) => {
+  try {
+    const { id: taskId } = req.params;
+    const data = req.body;
+    const task = await Task.findOneAndUpdate({ _id: taskId }, data, {
+      new: true,
+      runValidators: true,
+      overwrite: true,
+    });
+    if (!task) return res.status(404).json({ msg: "no task with given ID" });
+    res.status(201).json({ task });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: error });
+  }
+};
+
 module.exports = {
   getAllTasks,
   createTask,
   getTask,
   updateTask,
   deleteTask,
+  editTask,
 };
