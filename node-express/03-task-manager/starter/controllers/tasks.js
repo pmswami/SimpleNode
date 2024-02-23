@@ -17,36 +17,45 @@ const getTask = asyncWrapper(async (req, res, next) => {
   const task = await Task.findOne({ _id: taskId });
   if (!task) {
     return next(createCustomError(`No Task found with ID ${taskId}`, 404));
-    const error = new Error("Not Found");
-    error.status = 400;
-    return next(error);
+    // const error = new Error("Not Found");
+    // error.status = 400;
+    // return next(error);
     // return res.status(404).json({ msg: "no task with given ID" });
   }
   res.status(201).json({ task });
 });
 
-const deleteTask = asyncWrapper(async (req, res) => {
+const deleteTask = asyncWrapper(async (req, res, next) => {
   const { id: taskId } = req.params;
   const task = await Task.findOneAndDelete({ _id: taskId });
-  // console.log(task);
-  if (!task)
+  if (!task) {
     return next(createCustomError(`No Task found with ID ${taskId}`, 404));
+    // const error = new Error("Not Found");
+    // error.status = 400;
+    // return next(error);
+    // return res.status(404).json({ msg: "no task with given ID" });
+  }
   res.status(201).json({ task });
 });
 
-const updateTask = asyncWrapper(async (req, res) => {
+const updateTask = asyncWrapper(async (req, res, next) => {
   const { id: taskId } = req.params;
   const data = req.body;
   const task = await Task.findOneAndUpdate({ _id: taskId }, data, {
     new: true,
     runValidators: true,
   });
-  if (!task)
+  if (!task) {
     return next(createCustomError(`No Task found with ID ${taskId}`, 404));
+    // const error = new Error("Not Found");
+    // error.status = 400;
+    // return next(error);
+    // return res.status(404).json({ msg: "no task with given ID" });
+  }
   res.status(201).json({ task });
 });
 
-const editTask = asyncWrapper(async (req, res) => {
+const editTask = asyncWrapper(async (req, res, next) => {
   const { id: taskId } = req.params;
   const data = req.body;
   const task = await Task.findOneAndUpdate({ _id: taskId }, data, {
@@ -54,8 +63,13 @@ const editTask = asyncWrapper(async (req, res) => {
     runValidators: true,
     overwrite: true,
   });
-  if (!task)
+  if (!task) {
     return next(createCustomError(`No Task found with ID ${taskId}`, 404));
+    // const error = new Error("Not Found");
+    // error.status = 400;
+    // return next(error);
+    // return res.status(404).json({ msg: "no task with given ID" });
+  }
   res.status(201).json({ task });
 });
 
