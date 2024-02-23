@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
-const port = 3000;
 const tasks = require("./routes/tasks");
 const connectDB = require("./db/connect");
 app.use(express.json());
 require("dotenv").config();
+const port = process.env.PORT || 3000;
 app.use(express.static("./public"));
 const notFound = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
