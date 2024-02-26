@@ -21,8 +21,12 @@ app.use(express.json());
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/jobs", jobsRouter);
 
-// app.get("/", (req, res) => {
-//   res.send("jobs api");
+app.get("/", (req, res) => {
+  res.send("jobs api");
+});
+
+// app.get("/api/v1/auth/register", (req, res) => {
+//   res.send("register api");
 // });
 
 app.use(notFoundMiddleware);

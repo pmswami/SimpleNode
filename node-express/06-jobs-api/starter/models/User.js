@@ -20,7 +20,6 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: [true, "Please provide password"],
     minlength: 6,
-    maxlength: 12,
   },
 });
-module.exports = mongoose.Model("User", UserSchema);
+module.exports = mongoose.model("User", UserSchema);
