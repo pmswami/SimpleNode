@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const Job = require("../models/Job");
-const { NotFoundError } = require("../errors");
+const { NotFoundError, BadRequestError } = require("../errors");
 
 const getAllJobs = async (req, res) => {
   // res.send("Get all jobs");
@@ -33,7 +33,26 @@ const createJob = async (req, res) => {
 };
 
 const updateJob = async (req, res) => {
-  res.send("Update an existing job");
+  const {
+    user: { userId },
+    params: { id: jobId },
+    body: { company, position },
+  } = req;
+  // const { user, params, body } = req;
+  // console.log(user, params, body);
+  if (company === "" || position === "") {
+    throw new BadRequestError("Company or Position fields cannot be empty");
+  }
+  const job = await Job.findByIdAndUpdate(
+    { _id: jobId, createdBy: userId },
+    req.body,
+    { new: true, runValidators: true }
+  );
+  if (!job) {
+    return new NotFoundError("No job found");
+  }
+  res.status(StatusCodes.OK).json({ job });
+  // res.send("Update an existing job");
 };
 
 const deleteJob = async (req, res) => {
